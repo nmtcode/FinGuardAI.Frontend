@@ -1,10 +1,28 @@
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { HomeLayout } from "./layouts/HomeLayout";
+import DashboardPage from "./pages/DashboardPage";
+
 function App() {
   return (
-    <div className="flex items-center justify-center h-screen bg-slate-900">
-      <h1 className="text-4xl font-bold text-sky-400 underline">
-        Hello world! Vite + Tailwind is live.
-      </h1>
-    </div>
+    <Router>
+      <Routes>
+        {/* التوجيه التلقائي */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+        {/* المسار الأبوي (Layout) */}
+        <Route element={<HomeLayout children={<DashboardPage />} />}>
+          <Route path="/dashboard" element={<DashboardPage />} />
+
+          {/* أي مسارات إضافية ستظهر هنا تلقائياً داخل الـ Layout */}
+          {/* <Route path="/reports" element={<ReportsPage />} /> */}
+        </Route>
+      </Routes>
+    </Router>
   );
 }
 
