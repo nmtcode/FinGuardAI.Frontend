@@ -1,0 +1,5 @@
+npm create vite@latest fingaurd-ai -- --template react-ts
+cd fingaurd-ai
+npm install tailwindcss postcss autoprefixer chart.js react-chartjs-2
+npx tailwindcss init -p
+# ثم أضف مسارات Tailwind في ملف CSS الرئيسي
