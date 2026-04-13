@@ -2,8 +2,9 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="px-10 py-6 text-center text-gray-400 text-[10px] font-black border-t border-gray-100 uppercase tracking-widest">
-      FinGuard AI — RegTech & Spend Management | 2026
+    <footer className="text-center text-gray-400 text-sm py-5 border-t border-gray-200 mt-4">
+      <i className="fas fa-shield-alt text-teal-500 ml-1"></i> 
+      FinGuard AI — تدقيق فوري قائم على RAG + SQL | الامتثال الذكي RegTech & Spend Management
     </footer>
   );
 };
