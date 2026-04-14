@@ -8,15 +8,11 @@ import {
   faSkullCrossbones,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Chart, registerables } from "chart.js";
+import Chart from 'chart.js/auto';
 import { CompliancePieChart } from "../Components/CompliancePieChart";
 import { StatCard } from "../Components/StatCard";
 import { WeeklyViolationsChart } from "../Components/WeeklyViolationsChart";
 
-// تسجيل مكونات Chart.js
-Chart.register(...registerables);
-
-// تعريف الواجهات للبيانات
 interface RequestRow {
   id: string;
   employee: string;
@@ -89,6 +85,16 @@ const DashboardPage = () => {
       },
       aiAction: { icon: faBan, text: "تجميد + إخطار", color: "text-red-500" },
       quickNote: "نمط مشبوه لطرف خارجي",
+    },
+    {
+      id: "#F-1020",
+      employee: "نورة العمري",
+      purpose: "أدوات برمجية HR",
+      amount: 1150,
+      date: "2025-04-08",
+      status: { label: "متوافق", type: "compliant", icon: faCheckCircle },
+      aiAction: { icon: faCheckCircle, text: "موثق", color: "text-green-600" },
+      quickNote: "متوافق مع سياسة الشراء",
     },
   ];
 
@@ -164,21 +170,22 @@ const DashboardPage = () => {
                 <th className="px-6 py-4">الموظف</th>
                 <th className="px-6 py-4">الغرض</th>
                 <th className="px-6 py-4">المبلغ</th>
+                <th className="px-6 py-4">التاريخ</th>
                 <th className="px-6 py-4">الحالة</th>
                 <th className="px-6 py-4">إجراء AI</th>
+                <th className="px-6 py-4">شرح سريع</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50 text-sm">
               {requestsData.map((req, idx) => (
                 <tr key={idx} className="hover:bg-gray-50/80 transition">
-                  <td className="px-6 py-4 font-bold text-gray-700">
-                    {req.id}
-                  </td>
+                  <td className="px-6 py-4 font-bold text-gray-700">{req.id}</td>
                   <td className="px-6 py-4 text-gray-600">{req.employee}</td>
                   <td className="px-6 py-4 text-gray-600">{req.purpose}</td>
                   <td className="px-6 py-4 font-mono font-bold text-teal-700">
                     ${req.amount.toLocaleString()}
                   </td>
+                  <td className="px-6 py-4 text-gray-500 text-xs">{req.date}</td>
                   <td className="px-6 py-4">
                     <span
                       className={`px-3 py-1 rounded-full text-[11px] font-bold flex items-center gap-2 w-fit
@@ -186,25 +193,21 @@ const DashboardPage = () => {
                         req.status.type === "compliant"
                           ? "bg-green-100 text-green-700"
                           : req.status.type === "violation"
-                            ? "bg-red-100 text-red-700"
-                            : "bg-amber-100 text-amber-700"
+                          ? "bg-red-100 text-red-700"
+                          : "bg-amber-100 text-amber-700"
                       }`}
                     >
-                      <FontAwesomeIcon
-                        icon={req.status.icon}
-                        className="text-[10px]"
-                      />
+                      <FontAwesomeIcon icon={req.status.icon} className="text-[10px]" />
                       {req.status.label}
                     </span>
                   </td>
                   <td className="px-6 py-4">
-                    <div
-                      className={`flex items-center gap-2 font-bold ${req.aiAction.color}`}
-                    >
+                    <div className={`flex items-center gap-2 font-bold ${req.aiAction.color}`}>
                       <FontAwesomeIcon icon={req.aiAction.icon} />
                       {req.aiAction.text}
                     </div>
                   </td>
+                  <td className="px-6 py-4 text-xs text-gray-500">{req.quickNote}</td>
                 </tr>
               ))}
             </tbody>
@@ -218,11 +221,12 @@ const DashboardPage = () => {
           <h3 className="font-bold text-gray-800 mb-6 flex items-center gap-2">
             <i className="fas fa-chart-pie text-teal-600"></i> توزيع الامتثال
           </h3>
-          <CompliancePieChart
-            labels={pieLabels}
-            data={pieData}
-            colors={pieColors}
-          />
+          <CompliancePieChart labels={pieLabels} data={pieData} colors={pieColors} />
+          <div className="flex justify-center gap-6 mt-4 text-sm">
+            <div><span className="inline-block w-3 h-3 rounded-full bg-[#2c8f9b] ml-1"></span> متوافق: 187</div>
+            <div><span className="inline-block w-3 h-3 rounded-full bg-[#e2584b] ml-1"></span> مخالف: 32</div>
+            <div><span className="inline-block w-3 h-3 rounded-full bg-[#f4b942] ml-1"></span> قيد المراجعة: 28</div>
+          </div>
         </div>
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
           <h3 className="font-bold text-gray-800 mb-6 flex items-center gap-2">
@@ -234,37 +238,113 @@ const DashboardPage = () => {
             borderColor="#c23d2e"
             backgroundColor="rgba(194,61,46,0.05)"
           />
+          <p className="text-xs text-center text-gray-500 mt-3">
+            انخفاض بنسبة 53% هذا الأسبوع بفضل تدقيق AI الفوري
+          </p>
         </div>
       </div>
+{/* 4. قسم RAG الذكي - تصميم محسن وجذاب */}
+<div className="rounded-2xl overflow-hidden shadow-lg mt-8">
+  {/* Header بتصميم عصري */}
+  <div className="bg-gradient-to-r from-teal-700 via-teal-800 to-gray-900 px-6 py-5 text-white">
+    <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex items-center gap-3">
+        <div className="bg-white/20 p-2.5 rounded-xl backdrop-blur-sm">
+          <i className="fas fa-brain text-2xl"></i>
+        </div>
+        <div>
+          <h3 className="font-black text-xl tracking-tight">تدقيق AI الذكي | استدعاء السياسات (RAG)</h3>
+          <p className="text-teal-200 text-sm">قرارات مدعومة بالذكاء الاصطناعي مع اقتباسات مباشرة من سياسات المؤسسة</p>
+        </div>
+      </div>
+      <span className="bg-white/10 text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1 backdrop-blur-sm">
+        <i className="fas fa-microchip"></i> توليد معزز بالاسترجاع
+      </span>
+    </div>
+  </div>
 
-      {/* 4. قسم RAG الذكي */}
-      <div className="bg-[#0a2e3b] text-white rounded-3xl p-8 relative overflow-hidden shadow-xl">
-        <div className="relative z-10">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="bg-teal-500/20 p-3 rounded-2xl">
-              <FontAwesomeIcon
-                icon={faUserCheck}
-                className="text-teal-400 text-xl"
-              />
-            </div>
-            <h3 className="font-black text-xl">رؤى AI الفورية (RAG Engine)</h3>
+  {/* المحتوى الرئيسي - بطاقات بتصميم كروت حديثة */}
+  <div className="bg-gray-50 p-6 space-y-5">
+    {/* بطاقة المخالفة الأولى */}
+    <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300">
+      <div className="p-5">
+        <div className="flex items-start gap-4">
+          <div className="bg-red-100 p-3 rounded-xl">
+            <i className="fas fa-quote-right text-red-500 text-xl"></i>
           </div>
-          <div className="grid gap-4">
-            <div className="bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-sm">
-              <p className="text-teal-300 text-xs font-bold mb-1 uppercase tracking-wider">
-                آخر تحليل استرجاعي:
+          <div className="flex-1">
+            <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
+              <h4 className="font-bold text-gray-800 text-lg">الطلب #F-1024</h4>
+              <span className="bg-red-100 text-red-700 text-xs px-3 py-1 rounded-full font-semibold">مخالفة نشطة</span>
+            </div>
+            <p className="text-gray-600 text-sm mb-2">
+              <span className="font-semibold">الموظف:</span> سارة الخالدي |
+              <span className="font-semibold mr-2"> المبلغ:</span> 5,200$ |
+              <span className="font-semibold mr-2"> التاريخ:</span> 2025-04-12
+            </p>
+            <div className="bg-gray-50 p-3 rounded-lg border-r-4 border-teal-500 mt-2">
+              <p className="text-sm text-gray-700">
+                <i className="fas fa-search text-teal-500 ml-1"></i>
+                <span className="font-semibold">اقتباس RAG من السياسة:</span> "بند رقم 4: أي مشتريات تقنية تتجاوز 3000$ تتطلب موافقة مسبقة من المدير التقني (CTO) وإلا تعتبر مخالفة للسياسة المالية."
               </p>
-              <p className="text-sm leading-relaxed text-gray-200">
-                بناءً على "سياسة المشتريات v2.1"، تم اكتشاف أن الطلب{" "}
-                <span className="text-white font-bold">#F-1024</span> يفتقد
-                لنموذج الجدوى التقنية المطلوب للمشتريات التي تتجاوز 5000$.
-              </p>
+            </div>
+            <div className="mt-3 flex items-center gap-2 text-red-700 bg-red-50 p-2 rounded-lg">
+              <i className="fas fa-gavel"></i>
+              <span className="text-sm font-medium">⚡ قرار AI: رفض مؤقت + إشعار للمدير التقني. الاقتباس من الصفحة 12، "سياسة المشتريات التقنية v2.pdf".</span>
             </div>
           </div>
         </div>
-        {/* خلفية جمالية */}
-        <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl"></div>
       </div>
+    </div>
+
+    {/* بطاقة AML */}
+    <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300">
+      <div className="p-5">
+        <div className="flex items-start gap-4">
+          <div className="bg-amber-100 p-3 rounded-xl">
+            <i className="fas fa-shield-alt text-amber-500 text-xl"></i>
+          </div>
+          <div className="flex-1">
+            <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
+              <h4 className="font-bold text-gray-800 text-lg">الطلب #F-1021</h4>
+              <span className="bg-amber-100 text-amber-700 text-xs px-3 py-1 rounded-full font-semibold">اشتباه AML</span>
+            </div>
+            <p className="text-gray-600 text-sm mb-2">
+              <span className="font-semibold">الموظف:</span> خالد المطيري |
+              <span className="font-semibold mr-2"> المبلغ:</span> 3,200$ |
+              <span className="font-semibold mr-2"> التاريخ:</span> 2025-04-09
+            </p>
+            <div className="bg-gray-50 p-3 rounded-lg border-r-4 border-amber-500 mt-2">
+              <p className="text-sm text-gray-700">
+                <i className="fas fa-brain text-amber-500 ml-1"></i>
+                <span className="font-semibold">تحليل AML:</span> كشف AI نمط تحويلات متكررة لطرف خارجي غير معتمد وفق بند مكافحة غسيل الأموال (AML) من السياسة رقم 7.
+              </p>
+            </div>
+            <div className="mt-3 flex items-center gap-2 text-amber-700 bg-amber-50 p-2 rounded-lg">
+              <i className="fas fa-handcuffs"></i>
+              <span className="text-sm font-medium">قرار AI: تجميد الطلب تلقائياً وإخطار مسؤول الامتثال البشري للمراجعة.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* ملاحظة ذكية محسنة مع شريط تقدم وهمي */}
+    <div className="bg-gradient-to-r from-teal-50 to-white p-5 rounded-xl border border-teal-200 flex flex-wrap items-center justify-between gap-3">
+      <div className="flex items-start gap-3 flex-1">
+        <i className="fas fa-lightbulb text-teal-600 text-2xl mt-0.5"></i>
+        <div>
+          <p className="font-bold text-teal-800">💡 رؤية النظام:</p>
+          <p className="text-sm text-teal-700">نظام FinGuard AI يعمل كمساعد تدقيق فوري، مع إمكانية التتبع الكامل للقرارات عبر الاقتباس المباشر من مستندات السياسات. دقة الامتثال ارتفعت <span className="font-bold text-teal-900">34%</span> منذ تفعيل RAG.</p>
+        </div>
+      </div>
+      <div className="bg-teal-100 rounded-full px-4 py-2 text-teal-800 text-sm font-semibold flex items-center gap-2">
+        <i className="fas fa-chart-line"></i>
+        <span>تحسن مستمر</span>
+      </div>
+    </div>
+  </div>
+</div>
     </div>
   );
 };
