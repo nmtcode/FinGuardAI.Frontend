@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>FinGuard AI | التحليل الذكي للطلبات المالية</title>
+    <!-- Tailwind CSS + Font Awesome 6 + Google Fonts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f4f7fc;
+            color: #1e2a3e;
+        }
+        /* ألوان العلامة التجارية (Teal) */
+        .bg-custom-teal { background-color: #1f6e7a; }
+        .text-custom-teal { color: #1f6e7a; }
+        .border-custom-teal { border-color: #1f6e7a; }
+        .ring-custom-teal:focus { ring-color: #1f6e7a; }
+        .hover-bg-custom-teal:hover { background-color: #0f5c68; }
+
+        /* تأثيرات البطاقات */
+        .card-hover-effect {
+            transition: all 0.25s ease;
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.1);
+        }
+        /* شريط التمرير الأنيق */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #1f6e7a; border-radius: 10px; }
+
+        /* اهتزاز لطيف للمربع الكبير عند المخالفة */
+        @keyframes gentleShake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+            100% { transform: translateX(0); }
+        }
+        .shake-border {
+            animation: gentleShake 0.3s ease-in-out 0s 2;
+        }
+
+        /* تحسين حقول الإدخال */
+        .input-modern {
+            border-radius: 56px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            transition: all 0.2s;
+            padding: 0.6rem 1rem;
+            width: 100%;
+        }
+        .input-modern:focus {
+            border-color: #1f6e7a;
+            box-shadow: 0 0 0 3px rgba(31, 110, 122, 0.2);
+            outline: none;
+        }
+
+        /* الكروت الداخلية المستطيلة (ثلاثة) */
+        .inner-rect-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 1rem 1.2rem;
+            border: 1px solid #1b364d;
+            transition: all 0.2s;
+            height: 100%;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .inner-rect-card:hover {
+            border-color: #cbdde6;
+            background-color: #fefefe;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- المحتوى الرئيسي بدون سايدبار، مع شريط علوي بسيط -->
+    <main class="max-w-[1400px] mx-auto p-5 md:p-8">
+        <!-- رأس الصفحة متوافق مع الهوية -->
+        <div class="flex flex-wrap justify-between items-center mb-6">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
+                    <i class="fas fa-microchip text-custom-teal text-3xl"></i>
+                     تحليل  AI
+                </h1>
+                <p class="text-gray-500 text-sm mt-1">تدقيق فوري باستخدام RAG (استرجاع معزز) مع اقتباسات من سياسات الشركة</p>
+            </div>
+            <div class="flex gap-3 mt-3 md:mt-0">
+                <button id="newRequestBtn" class="bg-custom-teal hover:bg-[#0f5c68] text-white px-5 py-2 rounded-full text-sm font-semibold shadow-md transition flex items-center gap-2">
+                    <i class="fas fa-plus-circle"></i> طلب مالي جديد
+                </button>
+            </div>
+        </div>
+
+        <!-- بطاقة الإدخال (بيانات الطلب) -->
+        <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 mb-8">
+            <div class="flex items-center gap-2 border-b border-gray-100 pb-3 mb-5">
+                <i class="fas fa-clipboard-list text-custom-teal text-lg"></i>
+                <h2 class="text-lg font-bold text-gray-800">بيانات الطلب للتدقيق الذكي</h2>
+                <span class="bg-teal-50 text-custom-teal text-xs px-3 py-1 rounded-full mr-auto"><i class="fas fa-robot ml-1"></i> RAG Auditor</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="fas fa-user-circle ml-1 text-custom-teal"></i> الموظف / مقدم الطلب</label>
+                    <input type="text" id="employeeName" value="سارة الخالدي" class="input-modern" placeholder="الاسم">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="fas fa-bullhorn ml-1 text-custom-teal"></i> الغرض من الطلب</label>
+                    <input type="text" id="requestPurpose" value="شراء أجهزة لابتوب" class="input-modern" placeholder="مثال: تراخيص برمجية، أجهزة، سفر...">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="fas fa-dollar-sign ml-1 text-custom-teal"></i> المبلغ ($)</label>
+                    <input type="number" id="requestAmount" value="5200" class="input-modern" placeholder="القيمة بالدولار">
+                </div>
+            </div>
+            <div class="mt-7 flex justify-center">
+                <button id="analyzeBtn" class="bg-custom-teal hover:bg-[#0f5c68] text-white px-8 py-3 rounded-xl text-base font-bold shadow-md transition flex items-center gap-2">
+                    <i class="fas fa-brain"></i> تحليل باستخدام الذكاء الاصطناعي
+                </button>
+            </div>
+        </div>
+
+        <!-- حاوية عرض النتيجة (المربع الكبير ذو الحواف الملونة + الكروت الثلاثة) -->
+        <div id="resultContainer" class="hidden transition-all duration-300">
+            <!-- المربع الكبير الخارجي: يتغير لون حدوده حسب الحالة (متوافق / مخالف / مراجعة) -->
+            <div id="outerResultCard" class="rounded-2xl border-4 bg-white p-5 md:p-7 shadow-xl transition-all">
+                <!-- بداخله ثلاثة كروت مستطيلة (البند المقترح، التوصية، التبرير) -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <!-- 1. البند المقترح -->
+                    <div class="inner-rect-card">
+                        <div class="flex items-center gap-2 mb-3 border-b border-gray-100 pb-2">
+                            <i class="fas fa-file-contract text-custom-teal text-lg"></i>
+                            <span class="font-bold text-gray-800 text-sm uppercase tracking-wide">البند المقترح</span>
+                        </div>
+                        <div id="proposedPolicy" class="text-gray-700 text-sm leading-relaxed font-medium">-</div>
+                        <div id="policyQuote" class="text-xs text-gray-500 mt-2 italic border-r-2 border-gray-200 pr-2 hidden"></div>
+                    </div>
+
+                    <!-- 2. التوصية -->
+                    <div class="inner-rect-card">
+                        <div class="flex items-center gap-2 mb-3 border-b border-gray-100 pb-2">
+                            <i class="fas fa-gavel text-custom-teal text-lg"></i>
+                            <span class="font-bold text-gray-800 text-sm uppercase tracking-wide">التوصية</span>
+                        </div>
+                        <div id="recommendationText" class="text-gray-800 font-semibold text-base">-</div>
+                    </div>
+
+                    <!-- 3. التبرير -->
+                    <div class="inner-rect-card">
+                        <div class="flex items-center gap-2 mb-3 border-b border-gray-100 pb-2">
+                            <i class="fas fa-brain text-custom-teal text-lg"></i>
+                            <span class="font-bold text-gray-800 text-sm uppercase tracking-wide">التبرير</span>
+                        </div>
+                        <div id="justificationText" class="text-gray-600 text-sm leading-relaxed">-</div>
+                        <div id="thresholdInfo" class="text-xs text-gray-400 mt-2 hidden"></div>
+                    </div>
+                </div>
+                <!-- تذييل صغير للثقة -->
+                <div class="mt-5 pt-3 text-center text-xs text-gray-400 border-t border-gray-100 flex justify-between items-center">
+                    <span><i class="fas fa-database text-custom-teal ml-1"></i> مستند من قاعدة السياسات الذكية (RAG)</span>
+                    <span><i class="fas fa-clock ml-1"></i> تدقيق فوري بالاسترجاع المعزز</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- زر عائم للدردشة الذكية (اختياري) -->
+        <div id="chatFab" class="fixed bottom-6 left-6 bg-custom-teal text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg cursor-pointer transition hover:bg-[#0f5c68] z-20">
+            <i class="fas fa-comment-dots text-2xl"></i>
+        </div>
+    </main>
+
+    <script>
+        // --------------------------------------------------------------
+        // قاعدة سياسات محاكاة RAG (نفس التصاميم السابقة ولكن محسنة)
+        // --------------------------------------------------------------
+        const policiesDB = [
+            { 
+                id: 1, 
+                title: "سياسة المشتريات التقنية", 
+                content: "أي مشتريات تقنية (أجهزة، لابتوبات، خوادم) تتجاوز قيمتها 3000 دولار تتطلب موافقة مسبقة من المدير التقني CTO. المخالفة تؤدي إلى رفض الطلب.", 
+                keywords: ["لابتوب", "اجهزة", "خوادم", "تقنية", "كمبيوتر", "pc", "notebook", "خادم"], 
+                threshold: 3000, 
+                unit: "USD" 
+            },
+            { 
+                id: 2, 
+                title: "سياسة مكافحة غسيل الأموال (AML)", 
+                content: "أي تحويل أو دفعة تتجاوز 2500 دولار لطرف خارجي غير معتمد مسبقاً يجب أن تمر بمراجعة مسؤول الامتثال. الدفعات المتكررة لنفس المستفيد خلال 30 يومًا تستدعي التدقيق.", 
+                keywords: ["استشارات", "تحويل", "دفعة", "مورد خارجي", "قانونية", "محامي"], 
+                threshold: 2500, 
+                unit: "USD" 
+            },
+            { 
+                id: 3, 
+                title: "سياسة السفر والإقامة", 
+                content: "تذاكر السفر والإقامة للفنادق يجب ألا تتجاوز 4000 دولار للرحلة الواحدة دون موافقة المدير المالي. الرحلات الدولية تتطلب موافقة إضافية.", 
+                keywords: ["سفر", "تذكرة", "فندق", "إقامة", "رحلة", "طيران"], 
+                threshold: 4000, 
+                unit: "USD" 
+            },
+            { 
+                id: 4, 
+                title: "سياسة المصروفات الإدارية", 
+                content: "المصروفات الإدارية (قرطاسية، أدوات مكتبية) حتى 500 دولار معفاة من المراجعة، ما بين 500 و 1500 تحتاج مدير القسم، فوق 1500 تحتاج المدير المالي.", 
+                keywords: ["قرطاسية", "أدوات مكتبية", "طابعة", "أحبار", "مكتبية", "دفتر"], 
+                threshold: 1500, 
+                unit: "USD" 
+            },
+            { 
+                id: 5, 
+                title: "سياسة التسويق والفعاليات", 
+                content: "حملات التسويق الرقمي والفعاليات يجب ألا تتجاوز 5000$ دون موافقة إدارة التسويق التنفيذية، وتتطلب تقييم العائد على الاستثمار.", 
+                keywords: ["تسويق", "حملة", "إعلانات", "مؤثرين", "فعالية", "معرض"], 
+                threshold: 5000, 
+                unit: "USD" 
+            }
+        ];
+
+        // دالة التحليل الذكي (RAG) تعيد كائن النتيجة
+        function analyzeRequest(purpose, amount) {
+            const lowerPurpose = purpose.toLowerCase();
+            let matchedPolicy = null;
+            // البحث عن أول سياسة تطابق أي كلمة مفتاحية
+            for (let policy of policiesDB) {
+                let found = policy.keywords.some(keyword => lowerPurpose.includes(keyword));
+                if (found) {
+                    matchedPolicy = policy;
+                    break;
+                }
+            }
+            
+            // حالة عدم وجود سياسة محددة
+            if (!matchedPolicy) {
+                if (amount > 3000) {
+                    return {
+                        status: "مراجعة",
+                        decision: "معلق (مراجعة بشرية)",
+                        reason: "لم يتم العثور على سياسة محددة لهذا الغرض، ولكن المبلغ يتجاوز الحد العام للتدقيق التلقائي. يُوصى بعرض الطلب على المدقق المالي.",
+                        policyTitle: "سياسة عامة (مراجعة يدوية)",
+                        quote: "لا يوجد اقتباس محدد من السياسات لهذا النوع من المصروفات. يرجى التحقق من دليل السياسات الشامل.",
+                        threshold: null
+                    };
+                } else {
+                    return {
+                        status: "متوافق",
+                        decision: "معتمد تلقائياً ",
+                        reason: "لم يتم العثور على سياسة مقيدة تنطبق على هذا الطلب، والمبلغ ضمن الحدود المقبولة للنظام. يعتبر الطلب متوافقاً.",
+                        policyTitle: "لا توجد سياسة مقيدة",
+                        quote: "لا توجد بنود تقييدية لهذا النوع من المصروفات ضمن الحدود الطبيعية.",
+                        threshold: null
+                    };
+                }
+            }
+            
+            // سياسة مطابقة: فحص تجاوز الحد
+            if (amount > matchedPolicy.threshold) {
+                return {
+                    status: "مخالف",
+                    decision: "مرفوض - تجاوز الحد المسموح ",
+                    reason: `الطلب يخالف ${matchedPolicy.title} حيث أن المبلغ (${amount}$) يتجاوز الحد المسموح (${matchedPolicy.threshold}$) بدون موافقة مسبقة. يتطلب تدقيقاً فورياً من جهة الاختصاص.`,
+                    policyTitle: matchedPolicy.title,
+                    quote: matchedPolicy.content,
+                    threshold: matchedPolicy.threshold
+                };
+            } else {
+                return {
+                    status: "متوافق",
+                    decision: "معتمد تلقائياً ",
+                    reason: `الطلب متوافق مع ${matchedPolicy.title} حيث أن المبلغ (${amount}$) لا يتجاوز الحد المسموح (${matchedPolicy.threshold}$). الإجراء آمن ومطابق للسياسة المالية.`,
+                    policyTitle: matchedPolicy.title,
+                    quote: matchedPolicy.content,
+                    threshold: matchedPolicy.threshold
+                };
+            }
+        }
+
+        // العناصر DOM
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const employeeInput = document.getElementById('employeeName');
+        const purposeInput = document.getElementById('requestPurpose');
+        const amountInput = document.getElementById('requestAmount');
+        const resultContainer = document.getElementById('resultContainer');
+        const outerResultCard = document.getElementById('outerResultCard');
+        const proposedPolicyDiv = document.getElementById('proposedPolicy');
+        const policyQuoteSpan = document.getElementById('policyQuote');
+        const recommendationTextDiv = document.getElementById('recommendationText');
+        const justificationTextDiv = document.getElementById('justificationText');
+        const thresholdInfoSpan = document.getElementById('thresholdInfo');
+
+        // دالة تحديث لون الحدود والمربع الخارجي حسب الحالة وإظهار/إخفاء الاقتباس
+        function updateResultUI(analysis) {
+            // إزالة حدود سابقة وألوان الخلفية (نحافظ على خلفية بيضاء ولكن نغير لون الحدود فقط)
+            outerResultCard.classList.remove('border-green-500', 'border-red-500', 'border-yellow-500', 'border-teal-400');
+            let borderColor = '';
+            if (analysis.status === 'متوافق') {
+                borderColor = 'border-green-500';
+                // إضافة ظل خفيف أخضر
+                outerResultCard.style.boxShadow = '0 10px 25px -5px rgba(34,197,94,0.1)';
+            } else if (analysis.status === 'مخالف') {
+                borderColor = 'border-red-500';
+                outerResultCard.style.boxShadow = '0 10px 25px -5px rgba(239,68,68,0.1)';
+                // إضافة اهتزاز للمربع
+                outerResultCard.classList.add('shake-border');
+                setTimeout(() => outerResultCard.classList.remove('shake-border'), 600);
+            } else {
+                borderColor = 'border-yellow-500';
+                outerResultCard.style.boxShadow = '0 10px 25px -5px rgba(245,158,11,0.1)';
+            }
+            outerResultCard.classList.add(borderColor);
+            
+            // تعبئة البند المقترح
+            proposedPolicyDiv.innerText = analysis.policyTitle;
+            if (analysis.quote && analysis.policyTitle !== "لا توجد سياسة مقيدة" && analysis.policyTitle !== "سياسة عامة (مراجعة يدوية)") {
+                policyQuoteSpan.innerText = `"${analysis.quote.substring(0, 140)}${analysis.quote.length > 140 ? '...' : ''}"`;
+                policyQuoteSpan.classList.remove('hidden');
+            } else {
+                policyQuoteSpan.classList.add('hidden');
+                if (analysis.policyTitle === "لا توجد سياسة مقيدة") {
+                    policyQuoteSpan.innerText = '';
+                } else if (analysis.policyTitle === "سياسة عامة (مراجعة يدوية)") {
+                    policyQuoteSpan.innerText = 'لا يوجد اقتباس مباشر، يوصى بالمراجعة البشرية.';
+                    policyQuoteSpan.classList.remove('hidden');
+                }
+            }
+            
+            // التوصية
+            recommendationTextDiv.innerText = analysis.decision;
+            // إضافة أيقونة حسب الحالة (اختياري)
+            if (analysis.status === 'متوافق') {
+                recommendationTextDiv.innerHTML = `<i class="fas fa-check-circle text-green-600 ml-1"></i> ${analysis.decision}`;
+            } else if (analysis.status === 'مخالف') {
+                recommendationTextDiv.innerHTML = `<i class="fas fa-exclamation-triangle text-red-600 ml-1"></i> ${analysis.decision}`;
+            } else {
+                recommendationTextDiv.innerHTML = `<i class="fas fa-clock text-yellow-600 ml-1"></i> ${analysis.decision}`;
+            }
+            
+            // التبرير
+            justificationTextDiv.innerText = analysis.reason;
+            if (analysis.threshold) {
+                thresholdInfoSpan.innerHTML = `<i class="fas fa-chart-line ml-1"></i> الحد المسموح في السياسة: ${analysis.threshold}$`;
+                thresholdInfoSpan.classList.remove('hidden');
+            } else {
+                thresholdInfoSpan.classList.add('hidden');
+            }
+        }
+
+        // حدث التحليل الرئيسي
+        function performAnalysis() {
+            const employee = employeeInput.value.trim() || "غير محدد";
+            const purpose = purposeInput.value.trim();
+            const amountRaw = amountInput.value.trim();
+            
+            // التحقق من صحة المدخلات
+            if (!purpose) {
+                alert(" الرجاء إدخال الغرض من الطلب.");
+                purposeInput.focus();
+                return;
+            }
+            const amount = parseFloat(amountRaw);
+            if (isNaN(amount) || amount <= 0) {
+                alert(" الرجاء إدخال مبلغ صحيح (أكبر من صفر).");
+                amountInput.focus();
+                return;
+            }
+            
+            // استدعاء محرك RAG
+            const analysis = analyzeRequest(purpose, amount);
+            
+            // تحديث واجهة النتيجة وإظهار الحاوية
+            updateResultUI(analysis);
+            resultContainer.classList.remove('hidden');
+            
+            // تمرير سلس للنتيجة
+            setTimeout(() => {
+                resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+        
+        // ربط الحدث
+        analyzeBtn.addEventListener('click', performAnalysis);
+        
+        // دعم الضغط على Enter في الحقول (اختياري)
+        const inputs = [purposeInput, amountInput];
+        inputs.forEach(inp => {
+            inp.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') performAnalysis();
+            });
+        });
+        
+        // زر الطلب الجديد (محاكاة)
+        const newRequestBtn = document.getElementById('newRequestBtn');
+        newRequestBtn.addEventListener('click', () => {
+            alert("✨ فتح نموذج إنشاء طلب مالي جديد (متكامل مع RAG). يمكنك إدخال بيانات تجريبية للتحليل الفوري.");
+            // إعادة تعيين الحقول إلى قيم افتراضية جديدة كنموذج سريع
+            employeeInput.value = "أحمد المنصوري";
+            purposeInput.value = "اشتراك منصة تحليلات";
+            amountInput.value = "1890";
+            // إخفاء النتيجة السابقة إن وجدت
+            resultContainer.classList.add('hidden');
+        });
+        
+        // زر الدردشة العائم
+        const chatFab = document.getElementById('chatFab');
+        chatFab.addEventListener('click', () => {
+            alert("💬 مساعد FinGuard AI الذكي قادم قريباً! يمكنك الآن استخدام أداة التحليل أعلاه للتدقيق الفوري.");
+        });
+        
+        // تحليل افتراضي أولي عند تحميل الصفحة ليعرض مثالاً توضيحياً (اختياري لإثراء التجربة)
+        window.addEventListener('DOMContentLoaded', () => {
+            // نعرض تحليلاً مثالياً للطلب الحالي في المدخلات (لابتوب 5200$) لإظهار تجربة المستخدم فوراً
+            // لكن نفضل أن يكون المستخدم هو من يضغط، ولكن لتعزيز التصميم نعرض النتيجة تلقائياً بشكل غير مزعج
+            // سنقوم بعرض تحليل افتراضي بعد 300ms كدليل على قوة الأداة (ولكن بدون فرض، فقط إذا كانت النتيجة مخفية)
+            setTimeout(() => {
+                if (resultContainer.classList.contains('hidden')) {
+                    // نعرض تحليل للبيانات الحالية بشكل تلقائي لكن دون فرض (لكن هذا يجعل الصفحة تفاعلية)
+                    // الأفضل أن يقوم المستخدم بالضغط لكن لجعل الصفحة غنية نعرض مثالاً أولياً ولكننا سنحترم رغبة المستخدم
+                    // لضمان أفضل تجربة، سأقوم بتنفيذ تحليل تلقائي للبيانات المعبأة مسبقاً (لابتوب 5200$) فقط عند التحميل
+                    const demoPurpose = purposeInput.value;
+                    const demoAmount = parseFloat(amountInput.value);
+                    if (demoPurpose && !isNaN(demoAmount) && demoAmount > 0) {
+                        const demoAnalysis = analyzeRequest(demoPurpose, demoAmount);
+                        updateResultUI(demoAnalysis);
+                        resultContainer.classList.remove('hidden');
+                    }
+                }
+            }, 400);
+        });
+        
+        // تحسين إضافي: عند تغيير الحقول يتم إعادة تعيين الاهتزاز وإزالة الحدود المؤقتة؟ لا نريد تدخلاً مفرطاً
+        // لكننا نضيف خاصية إعادة تعيين الرسوم المتحركة عند التحليل الجديد.
+        // لا حاجة لإضافة تعقيد إضافي.
+    </script>
+</body>
+</html>
