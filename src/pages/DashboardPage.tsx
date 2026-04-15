@@ -125,29 +125,29 @@ const DashboardPage = () => {
         <StatCard
           title="مخالفات نشطة"
           value="32"
-          trend='<i class="fas fa-clock text-red-500"></i> عاجل'
+          trend='<i class="fas fa-clock text-amber-500"></i> عاجل'
           icon="fas fa-exclamation-triangle"
-          borderColor="border-red-400"
-          iconBg="bg-red-50"
-          iconColor="text-red-500"
+          borderColor="border-amber-400"
+          iconBg="bg-amber-50"
+          iconColor="text-amber-600"
         />
         <StatCard
           title="نسبة الامتثال"
           value="75.7%"
-          trend='<i class="fas fa-check-circle text-green-600"></i> جيدة جداً'
+          trend='<i class="fas fa-check-circle text-teal-600"></i> جيدة جداً'
           icon="fas fa-check-circle"
-          borderColor="border-green-400"
-          iconBg="bg-green-50"
-          iconColor="text-green-600"
+          borderColor="border-teal-400"
+          iconBg="bg-teal-50"
+          iconColor="text-teal-600"
         />
         <StatCard
           title="سياسات RAG"
           value="34"
-          trend='<i class="fas fa-database text-purple-600"></i> محدثة'
+          trend='<i class="fas fa-database text-teal-600"></i> محدثة'
           icon="fas fa-file-alt"
-          borderColor="border-purple-400"
-          iconBg="bg-purple-50"
-          iconColor="text-purple-600"
+          borderColor="border-teal-400"
+          iconBg="bg-teal-50"
+          iconColor="text-teal-600"
         />
       </div>
 
@@ -235,116 +235,14 @@ const DashboardPage = () => {
           <WeeklyViolationsChart
             labels={lineLabels}
             data={lineData}
-            borderColor="#c23d2e"
-            backgroundColor="rgba(194,61,46,0.05)"
+            borderColor="#2c8f9b"
+            backgroundColor="rgba(44,143,155,0.05)"
           />
           <p className="text-xs text-center text-gray-500 mt-3">
             انخفاض بنسبة 53% هذا الأسبوع بفضل تدقيق AI الفوري
           </p>
         </div>
       </div>
-{/* 4. قسم RAG الذكي - تصميم محسن وجذاب */}
-<div className="rounded-2xl overflow-hidden shadow-lg mt-8">
-  {/* Header بتصميم عصري */}
-  <div className="bg-gradient-to-r from-teal-700 via-teal-800 to-gray-900 px-6 py-5 text-white">
-    <div className="flex flex-wrap items-center justify-between gap-3">
-      <div className="flex items-center gap-3">
-        <div className="bg-white/20 p-2.5 rounded-xl backdrop-blur-sm">
-          <i className="fas fa-brain text-2xl"></i>
-        </div>
-        <div>
-          <h3 className="font-black text-xl tracking-tight">تدقيق AI الذكي | استدعاء السياسات (RAG)</h3>
-          <p className="text-teal-200 text-sm">قرارات مدعومة بالذكاء الاصطناعي مع اقتباسات مباشرة من سياسات المؤسسة</p>
-        </div>
-      </div>
-      <span className="bg-white/10 text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1 backdrop-blur-sm">
-        <i className="fas fa-microchip"></i> توليد معزز بالاسترجاع
-      </span>
-    </div>
-  </div>
-
-  {/* المحتوى الرئيسي - بطاقات بتصميم كروت حديثة */}
-  <div className="bg-gray-50 p-6 space-y-5">
-    {/* بطاقة المخالفة الأولى */}
-    <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300">
-      <div className="p-5">
-        <div className="flex items-start gap-4">
-          <div className="bg-red-100 p-3 rounded-xl">
-            <i className="fas fa-quote-right text-red-500 text-xl"></i>
-          </div>
-          <div className="flex-1">
-            <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
-              <h4 className="font-bold text-gray-800 text-lg">الطلب #F-1024</h4>
-              <span className="bg-red-100 text-red-700 text-xs px-3 py-1 rounded-full font-semibold">مخالفة نشطة</span>
-            </div>
-            <p className="text-gray-600 text-sm mb-2">
-              <span className="font-semibold">الموظف:</span> سارة الخالدي |
-              <span className="font-semibold mr-2"> المبلغ:</span> 5,200$ |
-              <span className="font-semibold mr-2"> التاريخ:</span> 2025-04-12
-            </p>
-            <div className="bg-gray-50 p-3 rounded-lg border-r-4 border-teal-500 mt-2">
-              <p className="text-sm text-gray-700">
-                <i className="fas fa-search text-teal-500 ml-1"></i>
-                <span className="font-semibold">اقتباس RAG من السياسة:</span> "بند رقم 4: أي مشتريات تقنية تتجاوز 3000$ تتطلب موافقة مسبقة من المدير التقني (CTO) وإلا تعتبر مخالفة للسياسة المالية."
-              </p>
-            </div>
-            <div className="mt-3 flex items-center gap-2 text-red-700 bg-red-50 p-2 rounded-lg">
-              <i className="fas fa-gavel"></i>
-              <span className="text-sm font-medium">⚡ قرار AI: رفض مؤقت + إشعار للمدير التقني. الاقتباس من الصفحة 12، "سياسة المشتريات التقنية v2.pdf".</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    {/* بطاقة AML */}
-    <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300">
-      <div className="p-5">
-        <div className="flex items-start gap-4">
-          <div className="bg-amber-100 p-3 rounded-xl">
-            <i className="fas fa-shield-alt text-amber-500 text-xl"></i>
-          </div>
-          <div className="flex-1">
-            <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
-              <h4 className="font-bold text-gray-800 text-lg">الطلب #F-1021</h4>
-              <span className="bg-amber-100 text-amber-700 text-xs px-3 py-1 rounded-full font-semibold">اشتباه AML</span>
-            </div>
-            <p className="text-gray-600 text-sm mb-2">
-              <span className="font-semibold">الموظف:</span> خالد المطيري |
-              <span className="font-semibold mr-2"> المبلغ:</span> 3,200$ |
-              <span className="font-semibold mr-2"> التاريخ:</span> 2025-04-09
-            </p>
-            <div className="bg-gray-50 p-3 rounded-lg border-r-4 border-amber-500 mt-2">
-              <p className="text-sm text-gray-700">
-                <i className="fas fa-brain text-amber-500 ml-1"></i>
-                <span className="font-semibold">تحليل AML:</span> كشف AI نمط تحويلات متكررة لطرف خارجي غير معتمد وفق بند مكافحة غسيل الأموال (AML) من السياسة رقم 7.
-              </p>
-            </div>
-            <div className="mt-3 flex items-center gap-2 text-amber-700 bg-amber-50 p-2 rounded-lg">
-              <i className="fas fa-handcuffs"></i>
-              <span className="text-sm font-medium">قرار AI: تجميد الطلب تلقائياً وإخطار مسؤول الامتثال البشري للمراجعة.</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    {/* ملاحظة ذكية محسنة مع شريط تقدم وهمي */}
-    <div className="bg-gradient-to-r from-teal-50 to-white p-5 rounded-xl border border-teal-200 flex flex-wrap items-center justify-between gap-3">
-      <div className="flex items-start gap-3 flex-1">
-        <i className="fas fa-lightbulb text-teal-600 text-2xl mt-0.5"></i>
-        <div>
-          <p className="font-bold text-teal-800">💡 رؤية النظام:</p>
-          <p className="text-sm text-teal-700">نظام FinGuard AI يعمل كمساعد تدقيق فوري، مع إمكانية التتبع الكامل للقرارات عبر الاقتباس المباشر من مستندات السياسات. دقة الامتثال ارتفعت <span className="font-bold text-teal-900">34%</span> منذ تفعيل RAG.</p>
-        </div>
-      </div>
-      <div className="bg-teal-100 rounded-full px-4 py-2 text-teal-800 text-sm font-semibold flex items-center gap-2">
-        <i className="fas fa-chart-line"></i>
-        <span>تحسن مستمر</span>
-      </div>
-    </div>
-  </div>
-</div>
     </div>
   );
 };

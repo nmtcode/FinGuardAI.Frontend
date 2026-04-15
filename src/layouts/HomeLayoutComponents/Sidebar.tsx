@@ -19,9 +19,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
     { label: "لوحة التحكم", icon: LayoutDashboard },
     { label: "الطلبات المالية", icon: FileText },
     { label: "تحليل AI", icon: Bot, isSmart: true },
-    { label: "كتيب السياسات", icon: BookOpen },
-    { label: "سجل التدقيق", icon: History },
-    { label: "الامتثال", icon: BarChart3 },
+   
   ];
 
   return (

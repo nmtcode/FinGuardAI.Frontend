@@ -1,1 +1,12 @@
 @import "tailwindcss";
+@import "tailwindcss";
+
+/* توحيد الخط لجميع العناصر */
+body {
+  font-family: 'Cairo', sans-serif !important;
+}
+
+/* التأكد من أن كل النصوص تتبع الخط المحدد */
+* {
+  font-family: inherit;
+}
