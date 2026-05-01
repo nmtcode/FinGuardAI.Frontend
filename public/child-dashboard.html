@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <title>بنك الجيل الواعد | لوحة تحكم ذكية للأطفال</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        user-select: none;
+      }
+
+      body {
+        min-height: 100vh;
+        font-family: "Tajawal", "Segoe UI", system-ui, sans-serif;
+        overflow-x: hidden;
+        position: relative;
+        background: linear-gradient(135deg, #ffffff 0%, #f5f7fe 100%);
+      }
+
+      .dynamic-overlay {
+        position: fixed;
+        inset: 0;
+        background: #c8e6df;
+        transition: background 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .coins-layer {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .floating-coin {
+        position: absolute;
+        bottom: -80px;
+        width: 42px;
+        height: 42px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        opacity: 0.65;
+        animation: flyCoin linear infinite;
+        filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.08));
+      }
+
+      @keyframes flyCoin {
+        0% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 0;
+        }
+        15% {
+          opacity: 0.75;
+        }
+        85% {
+          opacity: 0.75;
+        }
+        100% {
+          transform: translateY(-120vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .app-container {
+        position: relative;
+        z-index: 15;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px 28px 40px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-bottom: 36px;
+        background: rgba(255, 255, 255, 0.537);
+        backdrop-filter: blur(20px);
+        border-radius: 80px;
+        padding: 12px 28px;
+        box-shadow:
+          0 12px 28px rgba(0, 0, 0, 0.05),
+          inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(230, 230, 250, 0.6);
+        transition: background 0.4s;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .logo-img {
+        width: 56px;
+        height: 56px;
+        object-fit: contain;
+        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05));
+        transition: transform 0.2s;
+      }
+      .logo-img:hover {
+        transform: scale(1.03) rotate(1deg);
+      }
+
+      .title h1 {
+        font-size: 1.8rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #002cb2, #02b0c7, #0013e6);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        letter-spacing: -0.3px;
+        transition: background 0.5s;
+      }
+      .title p {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #4a7a5c;
+        transition: color 0.5s;
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .balance-card {
+        background: linear-gradient(125deg, #fff3cf, #ffeab3);
+        border-radius: 60px;
+        padding: 8px 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+        border: 1px solid #ffe0a3;
+        transition:
+          background 0.5s,
+          border-color 0.5s;
+      }
+      .balance-card i {
+        font-size: 1.8rem;
+        color: #e6a017;
+        transition: color 0.5s;
+      }
+      .balance-text {
+        font-weight: 800;
+        font-size: 1rem;
+        color: #7a5300;
+        transition: color 0.5s;
+      }
+      .balance-amount {
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: #1f543e;
+        letter-spacing: 1px;
+        direction: ltr;
+        display: inline-block;
+        transition: color 0.5s;
+      }
+      .balance-currency {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-right: 5px;
+        transition: color 0.5s;
+      }
+
+      .exit-btn {
+        background: rgba(255, 0, 0, 0.381);
+        backdrop-filter: blur(8px);
+        border: none;
+        padding: 10px 28px;
+        border-radius: 60px;
+        font-weight: 800;
+        font-size: 1rem;
+        font-family: "Tajawal", sans-serif;
+        color: #0d0d0da2;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 1px solid rgba(200, 90, 70, 0.3);
+      }
+      .exit-btn:hover {
+        background: #d21919;
+        color: white;
+        transform: scale(0.96);
+      }
+
+      .glass-master {
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(18px);
+        border-radius: 70px;
+        padding: 32px 38px;
+        box-shadow:
+          0 30px 45px -20px rgba(0, 0, 0, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        border: 1px solid rgba(255, 255, 245, 0.7);
+        transition: all 0.3s;
+        margin-bottom: 25px;
+      }
+
+      .dashboard-split {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 40px;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .content-left {
+        flex: 1.2;
+        min-width: 280px;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+
+      .welcome-text .child-greeting {
+        font-size: 3rem;
+        font-weight: 900;
+        background: linear-gradient(125deg, #1f6e48, #e67e22);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        margin-bottom: 10px;
+        letter-spacing: -0.5px;
+        transition: background 0.5s;
+      }
+      .welcome-text .child-greeting span {
+        font-size: 3.2rem;
+        background: linear-gradient(125deg, #d35400, #f39c12);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        transition: background 0.5s;
+      }
+      .big-question {
+        font-size: 1.9rem;
+        font-weight: 800;
+        color: #313131;
+        margin: 12px 0 8px 0;
+        line-height: 1.3;
+        border-right: 6px solid #ffb347;
+        padding-right: 18px;
+        transition:
+          color 0.5s,
+          border-color 0.5s;
+      }
+
+      .buttons-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 32px;
+        margin-top: 20px;
+      }
+
+      .cute-action-btn {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        background: linear-gradient(
+          135deg,
+          #ff6b8a,
+          #ff8e53,
+          #ffb347,
+          #ffd166,
+          #a0e7a0,
+          #6ec6f5,
+          #c77dff
+        );
+        background-size: 250% 250%;
+        animation: shimmerMove 4s ease infinite;
+        padding: 8px 28px;
+        border-radius: 100px;
+        box-shadow:
+          0 16px 24px -12px rgba(0, 0, 0, 0.12),
+          0 0 0 1px rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+        border: 1.5px solid rgba(255, 245, 200, 0.9);
+        min-width: 220px;
+        justify-content: center;
+      }
+      .cute-action-btn:hover {
+        background: linear-gradient(
+          135deg,
+          #ff5278,
+          #ff7a3a,
+          #ffa52e,
+          #ffc94d,
+          #88dd88,
+          #55b8f0,
+          #b966ff
+        );
+        background-size: 250% 250%;
+        transform: translateY(-3px);
+        box-shadow:
+          0 20px 30px -10px rgba(236, 110, 90, 0.4),
+          0 0 0 1px rgba(255, 255, 255, 0.5);
+      }
+      .cute-action-btn:active {
+        transform: scale(0.96);
+        box-shadow: 0 8px 14px rgba(0, 0, 0, 0.18);
+      }
+      .cute-action-btn img {
+        width: 62px;
+        height: 62px;
+        object-fit: contain;
+        filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.1));
+      }
+      .btn-label-modern {
+        font-size: 2.1rem;
+        font-weight: 800;
+        font-family: "Tajawal", sans-serif;
+        color: #ffffff;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+        letter-spacing: 0.8px;
+      }
+
+      @keyframes shimmerMove {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .shake-image {
+        animation: shakeImage 0.25s infinite alternate;
+      }
+      @keyframes shakeImage {
+        100% {
+          transform: translateX(-6px) rotate(-3deg);
+        }
+      }
+      .spin-image {
+        animation: spinImage 0.9s infinite linear;
+      }
+      @keyframes spinImage {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .image-right {
+        flex: 1;
+        min-width: 280px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .monster-card {
+        width: 100%;
+        max-width: 480px;
+        transition: transform 0.2s;
+        cursor: pointer;
+      }
+      .giant-monster-img {
+        width: 100%;
+        height: auto;
+        filter: drop-shadow(0 20px 28px rgba(0, 0, 0, 0.15));
+        borderradius: 48px;
+        transition: transform 0.2s;
+      }
+      .monster-card:hover .giant-monster-img {
+        transform: scale(1.01);
+      }
+
+      .instruction-hint {
+        margin-top: 24px;
+        text-align: center;
+        font-size: 0.9rem;
+        font-weight: 700;
+        background: rgba(240, 248, 255, 0.8);
+        backdrop-filter: blur(8px);
+        border-radius: 80px;
+        width: fit-content;
+        margin-right: auto;
+        margin-left: auto;
+        padding: 8px 28px;
+        color: #236b48;
+      }
+      footer {
+        margin-top: 30px;
+        text-align: center;
+        font-size: 0.75rem;
+        color: #4a7b62;
+        font-weight: 600;
+        transition: color 0.5s;
+      }
+
+      .loading-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        font-size: 1.5rem;
+        color: #236b48;
+        font-family: "Tajawal", sans-serif;
+      }
+
+      @media (max-width: 880px) {
+        .dashboard-split {
+          flex-direction: column-reverse;
+        }
+        .content-left {
+          align-items: center;
+          text-align: center;
+        }
+        .buttons-group {
+          justify-content: center;
+        }
+        .welcome-text .child-greeting {
+          font-size: 2.2rem;
+        }
+        .big-question {
+          font-size: 1.5rem;
+          border-right: none;
+          padding-right: 0;
+        }
+        .btn-label-modern {
+          font-size: 1.6rem;
+        }
+        .cute-action-btn img {
+          width: 48px;
+          height: 48px;
+        }
+        .balance-amount {
+          font-size: 1.4rem;
+        }
+      }
+      @media (max-width: 550px) {
+        .glass-master {
+          padding: 20px;
+        }
+        .btn-label-modern {
+          font-size: 1.3rem;
+        }
+        .cute-action-btn {
+          min-width: 170px;
+          gap: 12px;
+        }
+        .header {
+          padding: 8px 18px;
+        }
+        .balance-card {
+          padding: 4px 16px;
+        }
+        .balance-amount {
+          font-size: 1.2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dynamic-overlay" id="colorOverlay"></div>
+    <div class="coins-layer" id="coinsLayer"></div>
+
+    <div class="app-container">
+      <div class="header" id="mainHeader">
+        <div class="brand">
+          <img
+            class="logo-img"
+            src="assest/logo.png"
+            alt="شعار بنك الجيل"
+          />
+          <div class="title">
+            <h1 id="titleGradient">بنك الجيل الواعد</h1>
+            <p id="subtitleText">مصرف المستقبل الذكي</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <div class="balance-card" id="balanceCard">
+            <i class="fas fa-coins" id="balanceIcon"></i>
+            <div class="balance-text" id="balanceLabel">رصيدك :</div>
+            <div class="balance-amount" id="balanceAmount">--</div>
+            <div class="balance-currency" id="balanceCurrency">ريال</div>
+          </div>
+          <button class="exit-btn" id="exitAppBtn">
+            <i class="fas fa-sign-out-alt"></i> خروج
+          </button>
+        </div>
+      </div>
+
+      <div class="glass-master">
+        <div class="dashboard-split">
+          <div class="content-left">
+            <div class="welcome-text">
+              <div class="child-greeting" id="greetingText">
+                مرحباً <span id="childNameDisplay">...</span>
+              </div>
+              <div class="big-question" id="bigQuestion1">
+                كن مستعد لتحصل على المال وتحقق أهدافك
+              </div>
+              <div class="big-question" id="bigQuestion2">
+                ابدأ رحلتك: نفذ المهمات، احصل على الربح، وحقق الأهداف
+              </div>
+            </div>
+            <div class="buttons-group">
+              <div class="cute-action-btn" id="missionBtnNew">
+                <img src="assest/tanpih.png" alt="مهمة" id="missionImgNew" />
+                <span class="btn-label-modern">المهمة</span>
+              </div>
+              <div class="cute-action-btn" id="goalBtnNew">
+                <img src="assest/gool.png" alt="هدف" id="goalImgNew" />
+                <span class="btn-label-modern">الهدف</span>
+              </div>
+            </div>
+          </div>
+          <div class="image-right">
+            <div class="monster-card" id="giantImageWrapper">
+              <img
+                class="giant-monster-img"
+                src="assest/sonBlue.png"
+                alt="صورة تفاعلية"
+                id="giantImg"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="instruction-hint" id="instructionHint">
+        اضغط على الصورة لتغيير الألوان! 🎨
+      </div>
+      <footer id="footerText">
+        <i class="fas fa-chart-line"></i> تعلم، ادخر، ازدهر |
+        <i class="fas fa-hand-holding-usd"></i> بنك الجيل الواعد
+      </footer>
+    </div>
+
+    <!-- API JavaScript File -->
+    <script src="js/child-dashboard-api.js"></script>
+  </body>
+</html>
